@@ -44,6 +44,15 @@ def artist_result():
 
 @app.route('/artistlinks')
 def links():
+	result = request.args
+	base_url = "https://itunes.apple.com/search/"
+	params = {} 
+	params['media']='music'
+	params['entity']='musicArtist'
+	#params['term'] = artist_name
+	#params['limit'] = 10 
+	response = requests.get(base_url, params)
+	data = json.loads(response.text)
 	return render_template('artist_links.html')
 
 @app.route('/specific/song/<artist_name>')
@@ -51,10 +60,11 @@ def spec_artist(artist_name):
 	result = request.args
 	base_url = "https://itunes.apple.com/search/"
 	params = {} 
-	params['media']=result.get('music')
-	params['entity']=result.get('musicArtist')
-	params['term'] = result.get(artist_name)
-	params['limit'] = 10 
+	params['media']='music'
+	params['entity']='musicArtist'
+	params['entity']='musicTrack'
+	params['term'] = artist_name
+	#params['limit'] = 10 
 	response = requests.get(base_url, params)
 	data = json.loads(response.text)
 	return render_template('specific_artist.html', results = data['results'])
